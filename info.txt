@@ -1,0 +1,12 @@
+match id
+16120099
+
+starting 
+2026/06/23 12:00 p.m -5 utc
+
+Fonts:
+score numbers -> tech
+tcc
+
+vertical screen
+450x510

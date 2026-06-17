@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Portugal vs Uzbekistan</title>
+    <style>
+
+        :root {
+            --red-color: #E94945;
+            --blue-color: #3C9FD9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        @font-face {
+            font-family: 'bank-gothic';
+            src: url('./font/bank-gothic.ttf');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'technology-bold';
+            src: url('./font/technology-bold.ttf');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'tank-lite';
+            src: url('./font/tank-lite-italic.ttf');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        body {
+            font-family: 'bank-gothic';
+        }
+
+        #background-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            display: block;
+        }
+
+        #background-img.vertical {
+            object-fit: fill;
+        }
+
+        #main-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .goal-screen {
+            position: absolute;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease;
+            text-align: center;
+        }
+
+        .goal-screen.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* --- Independent Component Styles --- */
+        .layout-container {
+            position: absolute;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        .team-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* Move horizontally: adjust 'margin' or 'padding' */
+            margin: 0 50px;
+        }
+
+        .time-wrapper {
+            /* Move time component independently */
+        }
+
+        .score-number {
+            font-size: 150px;
+            font-weight: bold;
+            font-family: 'technology-bold';
+            letter-spacing: 15px;
+        }
+
+        .team-name {
+            font-size: 40px;
+            letter-spacing: 3px;
+        }
+
+        .time-text {
+            font-size: 60px;
+        }
+
+        #home-team-wrapper, #countdown-home {
+            color: var(--red-color);
+        }
+
+        #away-team-wrapper, #countdown-away {
+            color: var(--blue-color);
+        }
+
+        #countdown-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            font-size: 80px;
+            font-weight: bold;
+            letter-spacing: 5px;
+            text-shadow: -1px 0px 16px rgba(0,0,0,0.75);
+        }
+        #days-left-text {
+            font-family: 'tank-lite';
+        }
+
+        /* --- Independent Positioning Media Queries --- */
+
+        /* Example: Horizontal Screen */
+        @media (orientation: landscape) {
+            #home-team-wrapper {
+                /* Custom horizontal positioning for landscape */
+                position: absolute;
+                left: 19%;
+                top: 46.5%;
+            }
+            #away-team-wrapper {
+                /* Custom horizontal positioning for landscape */
+                position: absolute;
+                right: 16%;
+                top: 46%;
+            }
+            #time-wrapper {
+                /* Custom horizontal positioning for landscape */
+                position: absolute;
+                top: 61%;
+            }
+
+            .score-number {
+                font-size: 70px;
+                font-weight: bold;
+                margin-top: -7px;
+            }
+
+            .team-name {
+                font-size: 16px;
+            }
+
+            .time-text {
+                font-size: 16px;
+            }
+            #countdown-container {
+                position: absolute;
+                top: -18%;
+                right: -15%;
+                font-size: 120px;
+            }
+            #countdown-home {
+                position: absolute;
+                top: 80%;
+                left: 40%;
+                font-size: 16px;
+            }
+            #countdown-away {
+                position: absolute;
+                top: 80%;
+                right: 22.2%;
+                font-size: 16px;
+                letter-spacing: 1px;
+            }
+        }
+
+        /* Example: Vertical Screen */
+        @media (orientation: portrait) {
+            #home-team-wrapper {
+                /* Custom vertical positioning for portrait */
+                position: absolute;
+                top: 56.5%;
+                left: 0%;
+            }
+            #away-team-wrapper {
+                /* Custom vertical positioning for portrait */
+                position: absolute;
+                top: 56.5%;
+                right: -5%;
+            }
+            #time-wrapper {
+                /* Custom vertical positioning for portrait */
+                position: absolute;
+                top: 66%;
+            }
+
+            .score-number {
+                font-size: 75px;
+                font-weight: bold;
+                margin-top: -5px;
+            }
+
+            .team-name {
+                font-size: 15px;
+            }
+
+            .time-text {
+                font-size: 20px;
+            }
+            .font-size-finalizado-vertical {
+                font-size: 15px;
+            }
+            #countdown-container {
+                position: absolute;
+                top: 9%;
+                left: -11%;
+                font-size: 100px;
+            }
+            #countdown-home {
+                position: absolute;
+                top: 66%;
+                right: 42.5%;
+                font-size: 18px;
+                letter-spacing: 0;
+            }
+            #countdown-away {
+                position: absolute;
+                top: 66.2%;
+                left: 64.5%;
+                font-size: 16px;
+                letter-spacing: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="main-container">
+    <img id="background-img" src="./img/horizontal/scoreboard.png" alt="Background">
+
+    <!-- Independent Layout for Score Components -->
+    <div id="score-container" class="layout-container">
+        <!-- Home Team Component -->
+        <div id="home-team-wrapper" class="team-wrapper">
+            <div id="home-name" class="team-name">PORTUGAL</div>
+            <div id="home-score" class="score-number">00</div>
+        </div>
+
+        <!-- Time Component -->
+        <div id="time-wrapper" class="time-wrapper">
+            <div id="time-text" class="time-text">00:00</div>
+        </div>
+
+        <!-- Away Team Component -->
+        <div id="away-team-wrapper" class="team-wrapper">
+            <div id="away-name" class="team-name">UZBEKISTÁN</div>
+            <div id="away-score" class="score-number">00</div>
+        </div>
+    </div>
+    
+    <div id="countdown-container" class="layout-container">
+        <div id="days-left-text">00 DÍAS</div>
+        <div id="countdown-home" class="team-name">PORTUGAL</div>
+        <div id="countdown-away" class="team-name">UZBEKISTÁN</div>
+    </div>
+
+    <!-- <button id="testGoalBtn" class="test-btn">🎯 TEST</button> -->
+</div>
+
+<script>
+    /**
+     * Logic for Screen Size and Image Selection:
+     */
+    const TARGET_DATE = new Date('2026-06-23T12:00:00-05:00'); // prod
+    // const TARGET_DATE = new Date('2026-06-17T15:12:00-05:00'); // dev
+
+    function isGameStarted() {
+        // Force current time to be compared with the target UTC-5 date
+        const now = new Date();
+        const nowLima = new Date(now.toLocaleString("en-US", {timeZone: "America/Lima"}));
+        return nowLima >= TARGET_DATE;
+    }
+
+    function updateCountdownDisplay() {
+        if (!isGameStarted()) {
+            const now = new Date();
+            const nowLima = new Date(now.toLocaleString("en-US", {timeZone: "America/Lima"}));
+
+            // Normalize to midnight for day calculation
+            const nowMidnight = new Date(nowLima.getFullYear(), nowLima.getMonth(), nowLima.getDate());
+            const targetMidnight = new Date(TARGET_DATE.getFullYear(), TARGET_DATE.getMonth(), TARGET_DATE.getDate());
+
+            const diff = targetMidnight - nowMidnight;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+            document.getElementById('days-left-text').textContent = `${days >= 0 ? days : 0}`;
+            document.getElementById('score-container').style.display = 'none';
+            document.getElementById('countdown-container').style.display = 'flex';
+        } else {
+            document.getElementById('score-container').style.display = 'flex';
+            document.getElementById('countdown-container').style.display = 'none';
+        }
+    }
+
+    function updateBackground() {
+        const bgImg = document.getElementById('background-img');
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        
+        const gameStarted = isGameStarted();
+        let imgSrc = "";
+
+        if (height > width) {
+            imgSrc = gameStarted ? "./img/vertical/scoreboard.png" : "./img/vertical/countdown.png";
+            bgImg.classList.add('vertical');
+        } else {
+            imgSrc = gameStarted ? "./img/horizontal/scoreboard.png" : "./img/horizontal/countdown.png";
+            bgImg.classList.remove('vertical');
+        }
+
+        const absoluteImgPath = new URL(imgSrc, window.location.href).href;
+        
+        if (bgImg.src !== absoluteImgPath) {
+            bgImg.src = imgSrc;
+        }
+    }
+
+    // Initialize background and countdown once on load
+    updateBackground();
+    updateCountdownDisplay();
+    window.addEventListener('resize', updateBackground);
+
+    const GAME_ID = "portugal_vs_congo";
+    const STORAGE_KEY = "portugal_vs_congo_score";
+    const TIME_STORAGE_KEY = "portugal_vs_congo_time";
+    
+    function formatScore(num) {
+        return num.toString().padStart(2, '0');
+    }
+
+    function updateTimeDisplay(timeValue) {
+        const timeTextElement = document.getElementById("time-text");
+        if (timeValue === "finished") {
+            timeTextElement.textContent = "Finalizado";
+            timeTextElement.classList.add('font-size-finalizado-vertical')
+        } else {
+            // Assume input is like "5'"
+            const minutes = parseInt(timeValue.replace("'", ""));
+            if (!isNaN(minutes)) {
+                timeTextElement.textContent = `${minutes.toString().padStart(2, '0')}:00`;
+            } else {
+                timeTextElement.textContent = timeValue;
+            }
+        }
+    }
+    
+    // 1. Get saved score and time for UI display
+    let previousNumbers = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [0, 0];
+    let previousTime = localStorage.getItem(TIME_STORAGE_KEY) || "00'";
+
+    document.getElementById("home-score").textContent = formatScore(previousNumbers[0]);
+    document.getElementById("away-score").textContent = formatScore(previousNumbers[1]);
+    updateTimeDisplay(previousTime);
+
+    async function loadData() {
+        try {
+            const res = await fetch("https://doradobet-server.onrender.com/data?gameId=16120099"); // prod
+            // const res = await fetch("http://localhost:9009/data?gameId=16120099"); // dev
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+            
+            const data = await res.json();
+            
+            // Time handling
+            if (data.time && data.time !== previousTime) {
+                previousTime = data.time;
+                localStorage.setItem(TIME_STORAGE_KEY, previousTime);
+                updateTimeDisplay(previousTime);
+            }
+
+            // Score handling
+            if (!data.score || data.score.trim() === "") return;
+
+            const scoreParts = data.score.split(", ");
+            
+            if (scoreParts.length === 2) {
+                const homeScore = parseInt(scoreParts[0].split(" -> ")[1]);
+                const awayScore = parseInt(scoreParts[1].split(" -> ")[1]);
+                const currentNumbers = [homeScore, awayScore];
+
+                // Update UI and storage if the score changed AND is greater than or equal to previous
+                let shouldUpdate = false;
+                if (currentNumbers[0] >= previousNumbers[0] && currentNumbers[1] >= previousNumbers[1]) {
+                    shouldUpdate = true;
+                }
+
+                if (shouldUpdate && (currentNumbers[0] !== previousNumbers[0] || currentNumbers[1] !== previousNumbers[1])) {
+                    document.getElementById("home-score").textContent = formatScore(currentNumbers[0]);
+                    document.getElementById("away-score").textContent = formatScore(currentNumbers[1]);
+                    
+                    // Save as an array (original logic)
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(currentNumbers));
+                    // Save as formatted string (requested)
+                    localStorage.setItem(STORAGE_KEY + "_formatted", `${formatScore(currentNumbers[0])}-${formatScore(currentNumbers[1])}`);
+                    
+                    previousNumbers = currentNumbers;
+                }
+            }
+        } catch (error) { console.error("Error loading data:", error); }
+    }
+
+    loadData();
+    setInterval(loadData, 1000); // prod
+</script>
+</body>
+</html>
