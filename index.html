@@ -333,14 +333,13 @@
     /**
      * Logic for Screen Size and Image Selection:
      */
-    const TARGET_DATE = new Date('2026-06-27T18:30:00-05:00'); // prod
+    const TARGET_DATE = new Date('2026-06-27T19:30:00-04:00'); // prod
     // const TARGET_DATE = new Date('2026-06-23T16:01:00-05:00'); // dev
 
     function isGameStarted() {
         // Force current time to be compared with the target UTC-5 date
         const now = new Date();
-        const nowLima = new Date(now.toLocaleString("en-US", {timeZone: "America/Lima"}));
-        return nowLima >= TARGET_DATE;
+        return now >= TARGET_DATE;
     }
 
     let isMatchToday = false
